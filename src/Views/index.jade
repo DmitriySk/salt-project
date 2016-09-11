@@ -1,0 +1,15 @@
+doctype html
+html
+    head
+        title= title
+    body
+        if html
+            #app
+                div
+                    | !{html}
+            script(src="/js/common.js")
+            script(src="/js/main.js")
+        else if message
+            #error= message
+            pre= error
+
