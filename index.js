@@ -7,12 +7,30 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var React = require('react');
-var {renderToStaticMarkup, renderToString} = require('react-dom/server');
-var {RouterContext, match} = require('react-router');
+var ReactServer = require('react-dom/server');
+var Router = require('react-router');
 
 var routes = require('./src/routes').default;
 
 var app = express();
+
+if (process.env.NODE_ENV !== 'production') {
+	const webpack = require('webpack');
+	const webpackConfig = require('./webpack.config');
+	const webpackCompiler = webpack(webpackConfig);
+	app.use(require('webpack-dev-middleware')(webpackCompiler, {
+		publicPath: webpackConfig.output.publicPath,
+		stats: {colors: true},
+		noInfo: true,
+		hot: true,
+		inline: true,
+		lazy: false,
+		historyApiFallback: true,
+		quiet: true,
+	}));
+	app.use(require('webpack-hot-middleware')(webpackCompiler));
+	app.set('port', process.env.PORT || 3000);
+}
 
 // view engine setup
 app.set('views', path.resolve(__dirname, './src/Views'));
@@ -27,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
 
-	match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+	Router.match({ routes: routes, location: req.url }, function(error, redirectLocation, renderProps) {
 		if (error) {
 			console.log(error);
 			res.status(500).send(error.message);
@@ -37,7 +55,7 @@ app.use(function(req, res, next) {
 			// You can also check renderProps.components or renderProps.routes for
 			// your "not found" component or route respectively, and send a 404 as
 			// below, if you're using a catch-all route.
-			let html = renderToString(<RouterContext {...renderProps}/>);
+			var html = ReactServer.renderToString(React.createElement(Router.RouterContext, renderProps));
 			//console.log(renderProps);
 			res.render('index', {html: html});
 		} else {
@@ -78,5 +96,6 @@ app.use(function(err, req, res, next) {
 	});
 });
 
-
-module.exports = app;
+let server = app.listen(app.get('port'), function() {
+	console.log('Express server listening on port ' + server.address().port);
+});
