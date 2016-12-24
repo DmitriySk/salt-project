@@ -1,5 +1,5 @@
 import * as React from "react";
-import { connect } from "react-redux";
+const s = require("./style.css");
 
 interface IProps {}
 
@@ -7,7 +7,7 @@ interface IState {}
 
 export default class Header extends React.Component<IProps, IState> {
 	render() {
-		return <div>
+		return <div className={s["m-header"]}>
 			Header
 		</div>;
 	}

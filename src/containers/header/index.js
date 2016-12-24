@@ -5,13 +5,14 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var React = require("react");
+var s = require("./style.css");
 var Header = (function (_super) {
     __extends(Header, _super);
     function Header() {
         return _super.apply(this, arguments) || this;
     }
     Header.prototype.render = function () {
-        return React.createElement("div", null, "Header");
+        return React.createElement("div", { className: s["m-header-wrapper"] }, "Header");
     };
     return Header;
 }(React.Component));

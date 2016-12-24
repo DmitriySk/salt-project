@@ -1,13 +1,11 @@
-var path = require('path');
-var colors = require("colors");
-var rimraf = require('rimraf');
-var webpack = require('webpack');
-var postcssAssets = require('postcss-assets');
-var postcssNext = require('postcss-cssnext');
+let path = require('path');
+let colors = require("colors");
+let rimraf = require('rimraf');
+let webpack = require('webpack');
+let postcssAssets = require('postcss-assets');
+let postcssNext = require('postcss-cssnext');
 
-console.log(__dirname);
-
-var config = {
+let config = {
 	devtool: 'eval',
 
 	debug: true,
@@ -19,7 +17,8 @@ var config = {
 			_container: path.resolve(__dirname, "./src/containers"),
 		},
 		root: __dirname,
-		extensions: ['', '.ts', '.tsx', '.js', '.jsx']
+		modulesDirectories: ["src", "node_modules"],
+		extensions: ['', '.ts', '.tsx', '.js', '.jsx', '.css']
 	},
 
 	entry: {
@@ -40,18 +39,19 @@ var config = {
 		loaders: [
 			{
 				test: /(\.tsx?|\.jsx)$/,
-				loader: 'react-hot-loader/webpack!ts'
+				loader: 'react-hot/webpack!ts'
 			},
 			{
 				test: /\.json$/,
-				loader: 'json-loader'
+				loader: 'json'
 			},
 			{
 				test: /\.css$/,
+				include: [path.resolve('./src'), path.resolve('./node_modules')],
 				loaders: [
-					'style-loader',
-					'css-loader?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
-					'postcss-loader'
+					'style',
+					'css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
+					'postcss'
 				]
 			},
 			{
@@ -60,7 +60,7 @@ var config = {
 			},
 			{
 				test: /\.(woff|woff2)(\?.*)?$/,
-				loader: 'file-loader?name=h/[hash].[ext]'
+				loader: 'file?name=h/[hash].[ext]'
 			},
 			{
 				test: /\.ttf(\?.*)?$/,
@@ -87,7 +87,7 @@ var config = {
 		{
 			apply: function(compiler) {
 				console.log(__dirname);
-				rimraf.sync(path.resolve(__dirname, "public/js"));
+				//rimraf.sync(path.resolve(__dirname, "public/js"));
 			}
 		},
 		new webpack.DefinePlugin({

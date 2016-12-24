@@ -1,22 +1,23 @@
-require('node-jsx-babel').install();
+//require('node-jsx-babel').install();
 
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var React = require('react');
-var ReactServer = require('react-dom/server');
-var Router = require('react-router');
+let express = require('express');
+let path = require('path');
+let favicon = require('serve-favicon');
+let logger = require('morgan');
+let cookieParser = require('cookie-parser');
+let bodyParser = require('body-parser');
+let React = require('react');
+let ReactServer = require('react-dom/server');
+let Router = require('react-router');
 
-var routes = require('./src/routes').default;
+let routes = require('./src/routes').default;
 
-var app = express();
+let app = express();
 
 if (process.env.NODE_ENV !== 'production') {
 	const webpack = require('webpack');
-	const webpackConfig = require('./webpack.config');
+	const webpack_hot = require('webpack-hot-middleware');
+	const webpackConfig = require('./webpack.dev');
 	const webpackCompiler = webpack(webpackConfig);
 	app.use(require('webpack-dev-middleware')(webpackCompiler, {
 		publicPath: webpackConfig.output.publicPath,
@@ -28,7 +29,7 @@ if (process.env.NODE_ENV !== 'production') {
 		historyApiFallback: true,
 		quiet: true,
 	}));
-	app.use(require('webpack-hot-middleware')(webpackCompiler));
+	app.use(webpack_hot(webpackCompiler));
 	app.set('port', process.env.PORT || 3000);
 }
 
@@ -43,7 +44,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
+app.use(function(req, res) {
 
 	Router.match({ routes: routes, location: req.url }, function(error, redirectLocation, renderProps) {
 		if (error) {
@@ -55,7 +56,7 @@ app.use(function(req, res, next) {
 			// You can also check renderProps.components or renderProps.routes for
 			// your "not found" component or route respectively, and send a 404 as
 			// below, if you're using a catch-all route.
-			var html = ReactServer.renderToString(React.createElement(Router.RouterContext, renderProps));
+			let html = ReactServer.renderToString(React.createElement(Router.RouterContext, renderProps));
 			//console.log(renderProps);
 			res.render('index', {html: html});
 		} else {
@@ -67,7 +68,7 @@ app.use(function(req, res, next) {
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-	var err = new Error('Not Found');
+	let err = new Error('Not Found');
 	err.status = 404;
 	next(err);
 });
@@ -77,7 +78,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-	app.use(function(err, req, res, next) {
+	app.use(function(err, req, res) {
 		res.status(err.status || 500);
 		res.render('index', {
 			message: err.message,
@@ -88,7 +89,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
 	res.status(err.status || 500);
 	res.render('index', {
 		message: err.message,
