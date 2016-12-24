@@ -2,13 +2,15 @@ doctype html
 html
     head
         title= title
+        | !{styles}
     body
         if html
             #app
                 div
                     | !{html}
-            script(src="/js/mainpage.js")
         else if message
             #error= message
             pre= error
+
+        | !{scripts}
 

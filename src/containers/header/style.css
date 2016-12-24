@@ -1,4 +1,30 @@
 .m-header {
-	height: 200px;
-	background: green;
+	height: 100vh;
+	background: #202124;
+	position: relative;
+}
+
+.m-header-topline {
+	height: 60px;
+	background: #ffba37;
+}
+
+.m-header-inner {
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: center;
+	height: calc(100% - 70px - 60px);
+}
+
+.m-header-name-img {
+	width: 800px;
+}
+
+.m-header-bottomline {
+	height: 0px;
+	width: 100%;
+	border-top: 2px solid #f0eeef;
+	position: absolute;
+	bottom: 68px;
 }

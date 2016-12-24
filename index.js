@@ -12,37 +12,60 @@ let Router = require('react-router');
 
 let routes = require('./src/routes').default;
 
+const manifest = require('./public/assets/manifest.json');
+
 let app = express();
 
 if (process.env.NODE_ENV !== 'production') {
 	const webpack = require('webpack');
 	const webpack_hot = require('webpack-hot-middleware');
+	const webpack_middle = require('webpack-dev-middleware');
 	const webpackConfig = require('./webpack.dev');
 	const webpackCompiler = webpack(webpackConfig);
-	app.use(require('webpack-dev-middleware')(webpackCompiler, {
+	app.use(webpack_middle(webpackCompiler, {
 		publicPath: webpackConfig.output.publicPath,
-		stats: {colors: true},
+		stats: {
+			colors: true
+		},
 		noInfo: true,
 		hot: true,
 		inline: true,
 		lazy: false,
 		historyApiFallback: true,
-		quiet: true,
+		quiet: true
 	}));
 	app.use(webpack_hot(webpackCompiler));
-	app.set('port', process.env.PORT || 3000);
 }
+
+app.set('port', process.env.PORT || 3000);
 
 // view engine setup
 app.set('views', path.resolve(__dirname, './src/Views'));
 app.set('view engine', 'jade');
 
-app.use(favicon(__dirname + '/public/favicon.ico'));
+//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+const resolve = (files) => {
+	return files.map((src) => {
+		if (!manifest[src]) { return; }
+		return '/assets/' + manifest[src];
+	}).filter(file => file !== undefined);
+};
+
+const styles = resolve(['vendor.css', 'mainpage.css']);
+const renderStyles = styles.map((src, i) =>
+	`<link rel="stylesheet" href='${src}' />`
+).join(' ');
+
+const scripts = resolve(['vendor.js', 'mainpage.js']);
+const renderScripts = scripts.map((src, i) =>
+	`<script src='${src}'></script>`
+).join(' ');
 
 app.use(function(req, res) {
 
@@ -58,7 +81,11 @@ app.use(function(req, res) {
 			// below, if you're using a catch-all route.
 			let html = ReactServer.renderToString(React.createElement(Router.RouterContext, renderProps));
 			//console.log(renderProps);
-			res.render('index', {html: html});
+			res.render('index', {
+				html: html,
+				styles: renderStyles,
+				scripts: renderScripts
+			});
 		} else {
 			res.status(404).send('Not found');
 		}

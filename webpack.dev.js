@@ -4,6 +4,7 @@ let rimraf = require('rimraf');
 let webpack = require('webpack');
 let postcssAssets = require('postcss-assets');
 let postcssNext = require('postcss-cssnext');
+let ManifestPlugin = require('webpack-manifest-plugin');
 
 let config = {
 	devtool: 'eval',
@@ -16,21 +17,22 @@ let config = {
 			_component: path.resolve(__dirname, "./src/components"),
 			_container: path.resolve(__dirname, "./src/containers"),
 		},
-		root: __dirname,
+		root: path.resolve(__dirname),
 		modulesDirectories: ["src", "node_modules"],
-		extensions: ['', '.ts', '.tsx', '.js', '.jsx', '.css']
+		extensions: ['', '.ts', '.tsx', '.js', '.jsx']
 	},
 
 	entry: {
 		mainpage: [
 			'webpack-hot-middleware/client?reload=true',
+			'./src/mainstyle.css',
 			'./src/index.js',
 		]
 	},
 
 	output: {
-		path: path.resolve(__dirname, "public/js/"),
-		publicPath: '/js/',
+		path: path.resolve("./public/assets"),
+		publicPath: '/assets/',
 		filename: '[name].js',
 		pathinfo: true
 	},
@@ -38,7 +40,7 @@ let config = {
 	module: {
 		loaders: [
 			{
-				test: /(\.tsx?|\.jsx)$/,
+				test: /\.tsx?$/,
 				loader: 'react-hot/webpack!ts'
 			},
 			{
@@ -56,26 +58,27 @@ let config = {
 			},
 			{
 				test: /\.eot(\?.*)?$/,
-				loader: 'file?name=h/[hash].[ext]'
+				loader: 'file?name=font/[hash].[ext]'
 			},
 			{
 				test: /\.(woff|woff2)(\?.*)?$/,
-				loader: 'file?name=h/[hash].[ext]'
+				loader: 'file?name=font/[hash].[ext]'
 			},
 			{
 				test: /\.ttf(\?.*)?$/,
-				loader: 'url?limit=10000&mimetype=application/octet-stream&name=h/[hash].[ext]'
+				loader: 'url?limit=10000&mimetype=application/octet-stream&name=font/[hash].[ext]'
 			},
 			{
 				test: /\.svg(\?.*)?$/,
-				loader: 'url?limit=10000&mimetype=image/svg+xml&name=h/[hash].[ext]'
+				loader: 'url?limit=10000&mimetype=image/svg+xml&name=font/[hash].[ext]'
 			},
 			{
 				test: /\.(jpe?g|png|gif)$/i,
-				loader: 'url?limit=1000&name=h/[hash].[ext]'
+				loader: 'url?limit=1000&name=img/[hash].[ext]'
 			}
 		]
 	},
+
 	postcss: function () {
 		return [
 			postcssNext(),
@@ -84,12 +87,9 @@ let config = {
 	},
 
 	plugins: [
-		{
-			apply: function(compiler) {
-				console.log(__dirname);
-				//rimraf.sync(path.resolve(__dirname, "public/js"));
-			}
-		},
+		new ManifestPlugin({
+			fileName: 'manifest.json'
+		}),
 		new webpack.DefinePlugin({
 			'process.env.BROWSER': JSON.stringify(true),
 			'process.env.NODE_ENV': JSON.stringify('development')
@@ -97,7 +97,7 @@ let config = {
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),
 		new webpack.ProgressPlugin(function handler(percentage, msg) {
-			var msgArr = msg.split(" "), allChanks = -1, curChank = -1;
+			let msgArr = msg.split(" "), allChanks = -1, curChank = -1;
 
 			if (msgArr[0].indexOf("/") != -1) {
 				curChank = parseInt(msgArr[0].split("/")[0]);
@@ -105,9 +105,9 @@ let config = {
 
 				process.stdout.write("\r\x1b[K");
 
-				var count = 25, hashes="";
-				var c = allChanks / count;
-				for (var i = 0; i < count; ++i) {
+				let count = 25, hashes="";
+				let c = allChanks / count;
+				for (let i = 0; i < count; ++i) {
 					hashes += curChank > i*c ? "#" : " ";
 				}
 
@@ -120,5 +120,30 @@ let config = {
 		})
 	]
 };
+
+
+printLabel("DEVELOPMENT", "green");
+function printLabel(label, color) {
+	var size = require('window-size');
+	var w = size.width ? size.width : 31;
+	var top = ''; for(var i=1;i<=w;i++){ top += '#'; }
+	var center = '#';
+	for(var i=1; i<=(w-2);i++){ center += ' '; }
+	center += '#';
+
+	var text = '#';
+	for(var i=1;i<=(w/2-7);i++){ text += ' '; }
+	text += label;
+	for(var i=1;i<=(w/2-5);i++){ text += ' '; }
+	text += '#';
+
+
+	console.log(colors[color](top));
+	console.log(colors[color](center));
+	console.log(colors[color](text));
+	console.log(colors[color](center));
+	console.log(colors[color](top));
+	console.log(colors[color](''));
+}
 
 module.exports = config;

@@ -58,37 +58,60 @@
 
 	let routes = __webpack_require__(10).default;
 
+	const manifest = __webpack_require__(22);
+
 	let app = express();
 
 	if (process.env.NODE_ENV !== 'production') {
-		const webpack = __webpack_require__(22);
-		const webpack_hot = __webpack_require__(23);
-		const webpackConfig = __webpack_require__(24);
+		const webpack = __webpack_require__(23);
+		const webpack_hot = __webpack_require__(24);
+		const webpack_middle = __webpack_require__(25);
+		const webpackConfig = __webpack_require__(26);
 		const webpackCompiler = webpack(webpackConfig);
-		app.use(__webpack_require__(29)(webpackCompiler, {
+		app.use(webpack_middle(webpackCompiler, {
 			publicPath: webpackConfig.output.publicPath,
-			stats: {colors: true},
+			stats: {
+				colors: true
+			},
 			noInfo: true,
 			hot: true,
 			inline: true,
 			lazy: false,
 			historyApiFallback: true,
-			quiet: true,
+			quiet: true
 		}));
 		app.use(webpack_hot(webpackCompiler));
-		app.set('port', process.env.PORT || 3000);
 	}
+
+	app.set('port', process.env.PORT || 3000);
 
 	// view engine setup
 	app.set('views', path.resolve(__dirname, './src/Views'));
 	app.set('view engine', 'jade');
 
-	app.use(favicon(__dirname + '/public/favicon.ico'));
+	//app.use(favicon(__dirname + '/public/favicon.ico'));
 	app.use(logger('dev'));
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended: true}));
 	app.use(cookieParser());
 	app.use(express.static(path.join(__dirname, 'public')));
+
+	const resolve = (files) => {
+		return files.map((src) => {
+			if (!manifest[src]) { return; }
+			return '/assets/' + manifest[src];
+		}).filter(file => file !== undefined);
+	};
+
+	const styles = resolve(['vendor.css', 'mainpage.css']);
+	const renderStyles = styles.map((src, i) =>
+		`<link rel="stylesheet" href='${src}' />`
+	).join(' ');
+
+	const scripts = resolve(['vendor.js', 'mainpage.js']);
+	const renderScripts = scripts.map((src, i) =>
+		`<script src='${src}'></script>`
+	).join(' ');
 
 	app.use(function(req, res) {
 
@@ -104,7 +127,11 @@
 				// below, if you're using a catch-all route.
 				let html = ReactServer.renderToString(React.createElement(Router.RouterContext, renderProps));
 				//console.log(renderProps);
-				res.render('index', {html: html});
+				res.render('index', {
+					html: html,
+					styles: renderStyles,
+					scripts: renderScripts
+				});
 			} else {
 				res.status(404).send('Not found');
 			}
@@ -274,7 +301,9 @@
 	        return _super.apply(this, arguments) || this;
 	    }
 	    Header.prototype.render = function () {
-	        return React.createElement("div", { className: s["m-header"] }, "Header");
+	        return React.createElement("div", { className: s["m-header"] },
+	            React.createElement("div", { className: s["m-header-topline"] }),
+	            "Header");
 	    };
 	    return Header;
 	}(React.Component));
@@ -326,11 +355,12 @@
 
 
 	// module
-	exports.push([module.id, ".m-header___FDGle {\r\n\theight: 200px;\r\n\tbackground: yellow;\r\n}", "", {"version":3,"sources":["/./src/containers/header/style.css"],"names":[],"mappings":"AAAA;CACC,cAAc;CACd,mBAAmB;CACnB","file":"style.css","sourcesContent":[".m-header {\r\n\theight: 200px;\r\n\tbackground: yellow;\r\n}"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, ".m-header___FDGle {\r\n\theight: 200px;\r\n\tbackground: #202124;\r\n}\r\n\r\n.m-header-topline___3tbNo {\r\n\theight: 60px;\r\n\tbackground: #ffba37;\r\n}", "", {"version":3,"sources":["/./src/containers/header/style.css"],"names":[],"mappings":"AAAA;CACC,cAAc;CACd,oBAAoB;CACpB;;AAED;CACC,aAAa;CACb,oBAAoB;CACpB","file":"style.css","sourcesContent":[".m-header {\r\n\theight: 200px;\r\n\tbackground: #202124;\r\n}\r\n\r\n.m-header-topline {\r\n\theight: 60px;\r\n\tbackground: #ffba37;\r\n}"],"sourceRoot":"webpack://"}]);
 
 	// exports
 	exports.locals = {
-		"m-header": "m-header___FDGle"
+		"m-header": "m-header___FDGle",
+		"m-header-topline": "m-header-topline___3tbNo"
 	};
 
 /***/ },
@@ -615,24 +645,39 @@
 /* 22 */
 /***/ function(module, exports) {
 
-	module.exports = require("webpack");
+	module.exports = {
+		"mainpage.js": "mainpage.js"
+	};
 
 /***/ },
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = require("webpack-hot-middleware");
+	module.exports = require("webpack");
 
 /***/ },
 /* 24 */
+/***/ function(module, exports) {
+
+	module.exports = require("webpack-hot-middleware");
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	module.exports = require("webpack-dev-middleware");
+
+/***/ },
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	let path = __webpack_require__(2);
-	let colors = __webpack_require__(25);
-	let rimraf = __webpack_require__(26);
-	let webpack = __webpack_require__(22);
-	let postcssAssets = __webpack_require__(27);
-	let postcssNext = __webpack_require__(28);
+	let colors = __webpack_require__(27);
+	let rimraf = __webpack_require__(28);
+	let webpack = __webpack_require__(23);
+	let postcssAssets = __webpack_require__(29);
+	let postcssNext = __webpack_require__(30);
+	let ManifestPlugin = __webpack_require__(31);
 
 	let config = {
 		devtool: 'eval',
@@ -645,21 +690,22 @@
 				_component: path.resolve(__dirname, "./src/components"),
 				_container: path.resolve(__dirname, "./src/containers"),
 			},
-			root: __dirname,
+			root: path.resolve(__dirname),
 			modulesDirectories: ["src", "node_modules"],
-			extensions: ['', '.ts', '.tsx', '.js', '.jsx', '.css']
+			extensions: ['', '.ts', '.tsx', '.js', '.jsx']
 		},
 
 		entry: {
 			mainpage: [
 				'webpack-hot-middleware/client?reload=true',
+				'./src/mainstyle.css',
 				'./src/index.js',
 			]
 		},
 
 		output: {
-			path: path.resolve(__dirname, "public/js/"),
-			publicPath: '/js/',
+			path: path.resolve("./public/assets"),
+			publicPath: '/assets/',
 			filename: '[name].js',
 			pathinfo: true
 		},
@@ -667,7 +713,7 @@
 		module: {
 			loaders: [
 				{
-					test: /(\.tsx?|\.jsx)$/,
+					test: /\.tsx?$/,
 					loader: 'react-hot/webpack!ts'
 				},
 				{
@@ -685,26 +731,27 @@
 				},
 				{
 					test: /\.eot(\?.*)?$/,
-					loader: 'file?name=h/[hash].[ext]'
+					loader: 'file?name=font/[hash].[ext]'
 				},
 				{
 					test: /\.(woff|woff2)(\?.*)?$/,
-					loader: 'file?name=h/[hash].[ext]'
+					loader: 'file?name=font/[hash].[ext]'
 				},
 				{
 					test: /\.ttf(\?.*)?$/,
-					loader: 'url?limit=10000&mimetype=application/octet-stream&name=h/[hash].[ext]'
+					loader: 'url?limit=10000&mimetype=application/octet-stream&name=font/[hash].[ext]'
 				},
 				{
 					test: /\.svg(\?.*)?$/,
-					loader: 'url?limit=10000&mimetype=image/svg+xml&name=h/[hash].[ext]'
+					loader: 'url?limit=10000&mimetype=image/svg+xml&name=font/[hash].[ext]'
 				},
 				{
 					test: /\.(jpe?g|png|gif)$/i,
-					loader: 'url?limit=1000&name=h/[hash].[ext]'
+					loader: 'url?limit=1000&name=img/[hash].[ext]'
 				}
 			]
 		},
+
 		postcss: function () {
 			return [
 				postcssNext(),
@@ -713,12 +760,9 @@
 		},
 
 		plugins: [
-			{
-				apply: function(compiler) {
-					console.log(__dirname);
-					//rimraf.sync(path.resolve(__dirname, "public/js"));
-				}
-			},
+			new ManifestPlugin({
+				fileName: 'manifest.json'
+			}),
 			new webpack.DefinePlugin({
 				'process.env.BROWSER': JSON.stringify(true),
 				'process.env.NODE_ENV': JSON.stringify('development')
@@ -726,7 +770,7 @@
 			new webpack.HotModuleReplacementPlugin(),
 			new webpack.NoErrorsPlugin(),
 			new webpack.ProgressPlugin(function handler(percentage, msg) {
-				var msgArr = msg.split(" "), allChanks = -1, curChank = -1;
+				let msgArr = msg.split(" "), allChanks = -1, curChank = -1;
 
 				if (msgArr[0].indexOf("/") != -1) {
 					curChank = parseInt(msgArr[0].split("/")[0]);
@@ -734,9 +778,9 @@
 
 					process.stdout.write("\r\x1b[K");
 
-					var count = 25, hashes="";
-					var c = allChanks / count;
-					for (var i = 0; i < count; ++i) {
+					let count = 25, hashes="";
+					let c = allChanks / count;
+					for (let i = 0; i < count; ++i) {
 						hashes += curChank > i*c ? "#" : " ";
 					}
 
@@ -750,38 +794,69 @@
 		]
 	};
 
+
+	printLabel("DEVELOPMENT", "green");
+	function printLabel(label, color) {
+		var size = __webpack_require__(32);
+		var w = size.width ? size.width : 31;
+		var top = ''; for(var i=1;i<=w;i++){ top += '#'; }
+		var center = '#';
+		for(var i=1; i<=(w-2);i++){ center += ' '; }
+		center += '#';
+
+		var text = '#';
+		for(var i=1;i<=(w/2-7);i++){ text += ' '; }
+		text += label;
+		for(var i=1;i<=(w/2-5);i++){ text += ' '; }
+		text += '#';
+
+
+		console.log(colors[color](top));
+		console.log(colors[color](center));
+		console.log(colors[color](text));
+		console.log(colors[color](center));
+		console.log(colors[color](top));
+		console.log(colors[color](''));
+	}
+
 	module.exports = config;
 
-
-/***/ },
-/* 25 */
-/***/ function(module, exports) {
-
-	module.exports = require("colors");
-
-/***/ },
-/* 26 */
-/***/ function(module, exports) {
-
-	module.exports = require("rimraf");
 
 /***/ },
 /* 27 */
 /***/ function(module, exports) {
 
-	module.exports = require("postcss-assets");
+	module.exports = require("colors");
 
 /***/ },
 /* 28 */
 /***/ function(module, exports) {
 
-	module.exports = require("postcss-cssnext");
+	module.exports = require("rimraf");
 
 /***/ },
 /* 29 */
 /***/ function(module, exports) {
 
-	module.exports = require("webpack-dev-middleware");
+	module.exports = require("postcss-assets");
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	module.exports = require("postcss-cssnext");
+
+/***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	module.exports = require("webpack-manifest-plugin");
+
+/***/ },
+/* 32 */
+/***/ function(module, exports) {
+
+	module.exports = require("window-size");
 
 /***/ }
 /******/ ]);
