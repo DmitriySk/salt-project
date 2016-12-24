@@ -76,7 +76,7 @@
   "scripts": {
     "prestart": "npm run build",
     "start": "node server",
-    "start:prod": "cross-env NODE_ENV=production npm start",
+    "start:prod": "cross-env NODE_ENV=production cross-env PORT=8080 npm start",
     "clean": "rimraf public & rimraf server.js",
     "prebuild": "npm run clean",
     "build": "webpack --color -p",

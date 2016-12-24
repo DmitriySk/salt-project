@@ -1,7 +1,6 @@
 import * as React from "react";
 const s = require("./style.css");
 const name_svg = require('./name.svg');
-console.log(name_svg);
 interface IProps {}
 
 interface IState {}
