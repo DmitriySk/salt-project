@@ -1,11 +1,11 @@
 .m-header {
 	height: 100vh;
-	background: #202124;
+	background: #222225;
 	position: relative;
 }
 
 .m-header-topline {
-	height: 60px;
+	height: 25px;
 	background: #ffba37;
 }
 
@@ -14,17 +14,17 @@
 	flex-flow: column nowrap;
 	align-items: center;
 	justify-content: center;
-	height: calc(100% - 70px - 60px);
+	height: calc(100% - 25px - 25px);
 }
 
 .m-header-name-img {
-	width: 800px;
+	width: 500px;
 }
 
 .m-header-bottomline {
 	height: 0px;
 	width: 100%;
-	border-top: 2px solid #f0eeef;
+	border-top: 1px solid #f0eeef;
 	position: absolute;
-	bottom: 68px;
+	bottom: 23px;
 }

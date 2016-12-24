@@ -23,7 +23,7 @@ let config = {
 	},
 
 	entry: {
-		mainpage: ['./src/index.js',]
+		mainpage: ['./src/mainstyle.css', './src/index.js',]
 	},
 
 	output: {
