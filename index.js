@@ -4,14 +4,14 @@
 let winston = require('winston');
 require('winston-loggly-bulk');
 
-winston.add(winston.transports.Loggly, {
-	token: process.env.WL_TOKEN,
-	subdomain: process.env.WL_DOMAIN,
-	tags: ["Winston-NodeJS"],
-	json: true
-});
-
-winston.log('info',"Hello World from Node.js!");
+if (process.env.WL_TOKEN && process.env.WL_DOMAIN) {
+	winston.add(winston.transports.Loggly, {
+		token: process.env.WL_TOKEN,
+		subdomain: process.env.WL_DOMAIN,
+		tags: ["Winston-NodeJS"],
+		json: true
+	});
+}
 
 let express = require('express');
 let path = require('path');
@@ -56,12 +56,10 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.resolve(__dirname, './src/Views'));
 app.set('view engine', 'jade');
 
-app.use(function(req, res) {
-	//winston.log('info', req.url);
-});
-
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
+app.use(logger('short', {stream: {write: function(line) {
+	winston.log('info', line);
+}}}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
