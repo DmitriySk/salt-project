@@ -6,7 +6,7 @@ require('winston-loggly-bulk');
 
 winston.add(winston.transports.Loggly, {
 	token: process.env.WL_TOKEN,
-	subdomain: WL_DOMAIN,
+	subdomain: process.env.WL_DOMAIN,
 	tags: ["Winston-NodeJS"],
 	json: true
 });
