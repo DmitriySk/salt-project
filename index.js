@@ -1,5 +1,16 @@
 //require('node-jsx-babel').install();
 
+
+let winston = require('winston');
+require('winston-loggly-bulk');
+
+winston.add(winston.transports.Loggly, {
+	token: process.env.WL_TOKEN,
+	subdomain: WL_DOMAIN,
+	tags: ["Winston-NodeJS"],
+	json: true
+});
+
 let express = require('express');
 let path = require('path');
 let favicon = require('serve-favicon');
@@ -42,6 +53,10 @@ app.set('port', process.env.PORT || 3000);
 // view engine setup
 app.set('views', path.resolve(__dirname, './src/Views'));
 app.set('view engine', 'jade');
+
+app.use(function(req, res) {
+	winston.log('info', req.url);
+});
 
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -126,4 +141,5 @@ app.use(function(err, req, res) {
 
 let server = app.listen(app.get('port'), function() {
 	console.log('Express server listening on port ' + server.address().port);
+	winston.log('info', 'Express server listening on port ' + server.address().port);
 });
