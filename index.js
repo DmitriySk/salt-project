@@ -11,6 +11,8 @@ winston.add(winston.transports.Loggly, {
 	json: true
 });
 
+winston.log('info',"Hello World from Node.js!");
+
 let express = require('express');
 let path = require('path');
 let favicon = require('serve-favicon');
@@ -55,7 +57,7 @@ app.set('views', path.resolve(__dirname, './src/Views'));
 app.set('view engine', 'jade');
 
 app.use(function(req, res) {
-	winston.log('info', req.url);
+	//winston.log('info', req.url);
 });
 
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -141,5 +143,5 @@ app.use(function(err, req, res) {
 
 let server = app.listen(app.get('port'), function() {
 	console.log('Express server listening on port ' + server.address().port);
-	winston.log('info', 'Express server listening on port ' + server.address().port);
+	//winston.log('info', 'Express server listening on port ' + server.address().port);
 });
