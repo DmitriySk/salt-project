@@ -28,8 +28,6 @@ export default class Main extends React.Component<void, IState> {
 	render() {
 		return <div className="main_page">
 			<Header/>
-			<Center/>
-			<Footer/>
 		</div>
 	}
 }
