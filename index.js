@@ -29,6 +29,7 @@ const manifest = require('./public/assets/manifest.json');
 
 let app = express();
 
+let port = process.env.NODE_ENV === 'production' ? 8080 : 3000;
 if (process.env.NODE_ENV !== 'production') {
 	const webpack = require('webpack');
 	const webpack_hot = require('webpack-hot-middleware');
@@ -50,7 +51,7 @@ if (process.env.NODE_ENV !== 'production') {
 	app.use(webpack_hot(webpackCompiler));
 }
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || port);
 
 // view engine setup
 app.set('views', path.resolve(__dirname, './src/Views'));
