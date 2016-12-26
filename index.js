@@ -22,14 +22,12 @@ let bodyParser = require('body-parser');
 let React = require('react');
 let ReactServer = require('react-dom/server');
 let Router = require('react-router');
-
 let routes = require('./src/routes').default;
-
 const manifest = require('./public/assets/manifest.json');
 
 let app = express();
-
 let port = process.env.NODE_ENV === 'production' ? 8080 : 3000;
+
 if (process.env.NODE_ENV !== 'production') {
 	const webpack = require('webpack');
 	const webpack_hot = require('webpack-hot-middleware');
