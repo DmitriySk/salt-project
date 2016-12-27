@@ -1,12 +1,16 @@
 let path = require('path');
 let colors = require("colors");
-let rimraf = require('rimraf');
 let webpack = require('webpack');
 let postcssAssets = require('postcss-assets');
 let postcssNext = require('postcss-cssnext');
 let stylelint = require('stylelint');
-let ManifestPlugin = require('webpack-manifest-plugin');
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+let LOADERS_COMMON = require("./config/webpack.loaders").LOADERS_COMMON;
+let LOADERS_PROD = require("./config/webpack.loaders").LOADERS_PROD;
+let PLUGINS_COMMON = require("./config/webpack.plugins").PLUGINS_COMMON;
+let PLUGINS_PROD = require("./config/webpack.plugins").PLUGINS_PROD;
+
+let printLabel = require("./config/webpack.printLabel");
 
 let config = {
 	bail: true,
@@ -34,45 +38,7 @@ let config = {
 	},
 
 	module: {
-		loaders: [
-			{
-				test: /\.tsx?$/,
-				loader: 'ts'
-			},
-			{
-				test: /\.json$/,
-				loader: 'json'
-			},
-			{
-				test: /\.css$/,
-				include: [path.resolve('./src'), path.resolve('./node_modules')],
-				loader: ExtractTextPlugin.extract(
-					'style',
-					'css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
-					'postcss'
-				)
-			},
-			{
-				test: /\.eot(\?.*)?$/,
-				loader: 'file?name=font/[hash].[ext]'
-			},
-			{
-				test: /\.(woff|woff2)(\?.*)?$/,
-				loader: 'file?name=font/[hash].[ext]'
-			},
-			{
-				test: /\.ttf(\?.*)?$/,
-				loader: 'url?limit=10000&mimetype=application/octet-stream&name=font/[hash].[ext]'
-			},
-			{
-				test: /\.svg(\?.*)?$/,
-				loader: 'url?limit=10000&mimetype=image/svg+xml&name=font/[hash].[ext]'
-			},
-			{
-				test: /\.(jpe?g|png|gif)$/i,
-				loader: 'url?limit=1000&name=img/[hash].[ext]'
-			}
-		]
+		loaders: LOADERS_COMMON.concat(LOADERS_PROD)
 	},
 
 	postcss: function () {
@@ -83,52 +49,9 @@ let config = {
 		];
 	},
 
-	plugins: [
-		new ManifestPlugin({
-			fileName: 'manifest.json'
-		}),
-		new webpack.optimize.OccurrenceOrderPlugin(),
-		new webpack.optimize.DedupePlugin(),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'vendor',
-			filename: '[name].[chunkhash].min.js',
-			minChunks: Infinity
-		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false
-			}
-		}),
-		new ExtractTextPlugin('[name].[chunkhash].min.css'),
-		new webpack.DefinePlugin({
-			'process.env.BROWSER': JSON.stringify(true),
-			'process.env.NODE_ENV': JSON.stringify('production')
-		})
-	]
+	plugins: PLUGINS_COMMON.concat(PLUGINS_PROD)
 };
 
 printLabel("PRODUCTION ", "red");
-function printLabel(label, color) {
-	var size = require('window-size');
-	var w = size.width ? size.width : 31;
-	var top = ''; for(var i=1;i<=w;i++){ top += '#'; }
-	var center = '#';
-	for(var i=1; i<=(w-2);i++){ center += ' '; }
-	center += '#';
-
-	var text = '#';
-	for(var i=1;i<=(w/2-7);i++){ text += ' '; }
-	text += label;
-	for(var i=1;i<=(w/2-5);i++){ text += ' '; }
-	text += '#';
-
-
-	console.log(colors[color](top));
-	console.log(colors[color](center));
-	console.log(colors[color](text));
-	console.log(colors[color](center));
-	console.log(colors[color](top));
-	console.log(colors[color](''));
-}
 
 module.exports = config;

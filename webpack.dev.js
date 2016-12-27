@@ -4,7 +4,13 @@ let rimraf = require('rimraf');
 let webpack = require('webpack');
 let postcssAssets = require('postcss-assets');
 let postcssNext = require('postcss-cssnext');
-let ManifestPlugin = require('webpack-manifest-plugin');
+
+let LOADERS_COMMON = require("./config/webpack.loaders").LOADERS_COMMON;
+let LOADERS_DEV = require("./config/webpack.loaders").LOADERS_DEV;
+let PLUGINS_COMMON = require("./config/webpack.plugins").PLUGINS_COMMON;
+let PLUGINS_DEV = require("./config/webpack.plugins").PLUGINS_DEV;
+
+let printLabel = require("./config/webpack.printLabel");
 
 let config = {
 	devtool: 'eval',
@@ -38,45 +44,7 @@ let config = {
 	},
 
 	module: {
-		loaders: [
-			{
-				test: /\.tsx?$/,
-				loader: 'react-hot/webpack!ts'
-			},
-			{
-				test: /\.json$/,
-				loader: 'json'
-			},
-			{
-				test: /\.css$/,
-				include: [path.resolve('./src'), path.resolve('./node_modules')],
-				loaders: [
-					'style',
-					'css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
-					'postcss'
-				]
-			},
-			{
-				test: /\.eot(\?.*)?$/,
-				loader: 'file?name=font/[hash].[ext]'
-			},
-			{
-				test: /\.(woff|woff2)(\?.*)?$/,
-				loader: 'file?name=font/[hash].[ext]'
-			},
-			{
-				test: /\.ttf(\?.*)?$/,
-				loader: 'url?limit=10000&mimetype=application/octet-stream&name=font/[hash].[ext]'
-			},
-			{
-				test: /\.svg(\?.*)?$/,
-				loader: 'url?limit=10000&mimetype=image/svg+xml&name=font/[hash].[ext]'
-			},
-			{
-				test: /\.(jpe?g|png|gif)$/i,
-				loader: 'url?limit=1000&name=img/[hash].[ext]'
-			}
-		]
+		loaders: LOADERS_COMMON.concat(LOADERS_DEV)
 	},
 
 	postcss: function () {
@@ -86,64 +54,10 @@ let config = {
 		];
 	},
 
-	plugins: [
-		new ManifestPlugin({
-			fileName: 'manifest.json'
-		}),
-		new webpack.DefinePlugin({
-			'process.env.BROWSER': JSON.stringify(true),
-			'process.env.NODE_ENV': JSON.stringify('development')
-		}),
-		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoErrorsPlugin(),
-		new webpack.ProgressPlugin(function handler(percentage, msg) {
-			let msgArr = msg.split(" "), allChanks = -1, curChank = -1;
-
-			if (msgArr[0].indexOf("/") != -1) {
-				curChank = parseInt(msgArr[0].split("/")[0]);
-				allChanks = parseInt(msgArr[0].split("/")[1]);
-
-				process.stdout.write("\r\x1b[K");
-
-				let count = 25, hashes="";
-				let c = allChanks / count;
-				for (let i = 0; i < count; ++i) {
-					hashes += curChank > i*c ? "#" : " ";
-				}
-
-				process.stdout.write(
-					colors.red("progress:")
-					+ colors.green(" ["+hashes+"] ")
-					+ colors.blue(msg)
-				);
-			}
-		})
-	]
+	plugins: PLUGINS_COMMON.concat(PLUGINS_DEV)
 };
 
 
 printLabel("DEVELOPMENT", "green");
-function printLabel(label, color) {
-	var size = require('window-size');
-	var w = size.width ? size.width : 31;
-	var top = ''; for(var i=1;i<=w;i++){ top += '#'; }
-	var center = '#';
-	for(var i=1; i<=(w-2);i++){ center += ' '; }
-	center += '#';
-
-	var text = '#';
-	for(var i=1;i<=(w/2-7);i++){ text += ' '; }
-	text += label;
-	for(var i=1;i<=(w/2-5);i++){ text += ' '; }
-	text += '#';
-
-
-	console.log(colors[color](top));
-	console.log(colors[color](center));
-	console.log(colors[color](text));
-	console.log(colors[color](center));
-	console.log(colors[color](top));
-	console.log(colors[color](''));
-}
 
 module.exports = config;

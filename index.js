@@ -14,6 +14,7 @@ if (process.env.WL_TOKEN && process.env.WL_DOMAIN) {
 }
 
 let express = require('express');
+let expressStaticGzip = require("express-static-gzip");
 let path = require('path');
 let favicon = require('serve-favicon');
 let logger = require('morgan');
@@ -62,7 +63,7 @@ app.use(logger('short', {stream: {write: function(line) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use("/", expressStaticGzip(path.resolve(__dirname, "public"), { indexFromEmptyFile: false }));
 
 const resolve = (files) => {
 	return files.map((src) => {
