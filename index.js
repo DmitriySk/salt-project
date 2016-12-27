@@ -7,6 +7,7 @@ let path = require('path');
 let favicon = require('serve-favicon');
 let logger = require('morgan');
 let cookieParser = require('cookie-parser');
+let helmet = require('helmet');
 let bodyParser = require('body-parser');
 let React = require('react');
 let ReactServer = require('react-dom/server');
@@ -47,6 +48,9 @@ app.set('port', process.env.PORT || port);
 // view engine setup
 app.set('views', path.resolve(__dirname, './src/Views'));
 app.set('view engine', 'jade');
+
+/** Protect from web vulnerability  */
+app.use(helmet());
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('short', {stream: {write: function(line) {
