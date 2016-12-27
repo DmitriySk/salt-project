@@ -27,7 +27,7 @@ let config = {
 	},
 
 	entry: {
-		mainpage: ['./src/mainstyle.css', './src/index.js',]
+		main: ['./src/mainstyle.css', './src/index.js',]
 	},
 
 	output: {

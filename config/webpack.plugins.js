@@ -57,7 +57,7 @@ module.exports.PLUGINS_PROD = [
 	new webpack.optimize.OccurrenceOrderPlugin(),
 	new webpack.optimize.DedupePlugin(),
 	new webpack.optimize.CommonsChunkPlugin({
-		name: 'vendor',
+		name: 'common',
 		filename: '[name].[chunkhash].min.js',
 		minChunks: Infinity
 	}),

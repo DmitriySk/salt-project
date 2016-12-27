@@ -1,18 +1,6 @@
 //require('node-jsx-babel').install();
 
 
-let winston = require('winston');
-require('winston-loggly-bulk');
-
-if (process.env.WL_TOKEN && process.env.WL_DOMAIN) {
-	winston.add(winston.transports.Loggly, {
-		token: process.env.WL_TOKEN,
-		subdomain: process.env.WL_DOMAIN,
-		tags: ["Winston-NodeJS"],
-		json: true
-	});
-}
-
 let express = require('express');
 let expressStaticGzip = require("express-static-gzip");
 let path = require('path');
@@ -24,10 +12,13 @@ let React = require('react');
 let ReactServer = require('react-dom/server');
 let Router = require('react-router');
 let routes = require('./src/routes').default;
-const manifest = require('./public/assets/manifest.json');
+let fileResolver = require("./config/server.fileResolver")("/assets/");
+let winstonLogger = require("./config/server.logger");
 
 let app = express();
-let port = process.env.NODE_ENV === 'production' ? 8080 : 3000;
+
+const renderStyles = fileResolver.css(['common.css', 'main.css']);
+const renderScripts = fileResolver.js(['common.js', 'main.js']);
 
 if (process.env.NODE_ENV !== 'production') {
 	const webpack = require('webpack');
@@ -50,40 +41,26 @@ if (process.env.NODE_ENV !== 'production') {
 	app.use(webpack_hot(webpackCompiler));
 }
 
+let port = process.env.NODE_ENV === 'production' ? 8080 : 3000;
 app.set('port', process.env.PORT || port);
 
 // view engine setup
 app.set('views', path.resolve(__dirname, './src/Views'));
 app.set('view engine', 'jade');
 
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('short', {stream: {write: function(line) {
-	winston.log('info', line);
+	winstonLogger.log('info', line);
 }}}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+
+/** Returns gzip compressed static files if they are exists */
 app.use("/", expressStaticGzip(path.resolve(__dirname, "public"), { indexFromEmptyFile: false }));
 
-const resolve = (files) => {
-	return files.map((src) => {
-		if (!manifest[src]) { return; }
-		return '/assets/' + manifest[src];
-	}).filter(file => file !== undefined);
-};
-
-const styles = resolve(['vendor.css', 'mainpage.css']);
-const renderStyles = styles.map((src, i) =>
-	`<link rel="stylesheet" href='${src}' />`
-).join(' ');
-
-const scripts = resolve(['vendor.js', 'mainpage.js']);
-const renderScripts = scripts.map((src, i) =>
-	`<script src='${src}'></script>`
-).join(' ');
-
+/** Matches route and return prerendered markup */
 app.use(function(req, res) {
-
 	Router.match({ routes: routes, location: req.url }, function(error, redirectLocation, renderProps) {
 		if (error) {
 			console.log(error);
@@ -105,21 +82,19 @@ app.use(function(req, res) {
 			res.status(404).send('Not found');
 		}
 	});
-
 });
 
-/// catch 404 and forward to error handler
+/*** catch 404 and forward to error handler */
 app.use(function(req, res, next) {
 	let err = new Error('Not Found');
 	err.status = 404;
 	next(err);
 });
 
-/// error handlers
-
-// development error handler
-// will print stacktrace
+/*** error handlers */
 if (app.get('env') === 'development') {
+	// development error handler
+	// will print stacktrace
 	app.use(function(err, req, res) {
 		res.status(err.status || 500);
 		res.render('index', {
@@ -127,19 +102,18 @@ if (app.get('env') === 'development') {
 			error: err.stack
 		});
 	});
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res) {
-	res.status(err.status || 500);
-	res.render('index', {
-		message: err.message,
-		error: {}
+} else {
+	// production error handler
+	// no stacktraces leaked to user
+	app.use(function(err, req, res) {
+		res.status(err.status || 500);
+		res.render('index', {
+			message: err.message,
+			error: {}
+		});
 	});
-});
+}
 
 let server = app.listen(app.get('port'), function() {
 	console.log('Express server listening on port ' + server.address().port);
-	//winston.log('info', 'Express server listening on port ' + server.address().port);
 });

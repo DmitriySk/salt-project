@@ -29,7 +29,7 @@ let config = {
 	},
 
 	entry: {
-		mainpage: [
+		main: [
 			'webpack-hot-middleware/client?reload=true',
 			'./src/mainstyle.css',
 			'./src/index.js',
