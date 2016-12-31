@@ -11,5 +11,5 @@ node_modules
 
 .idea/
 *.iml
-public
+public/assets/
 server.js
