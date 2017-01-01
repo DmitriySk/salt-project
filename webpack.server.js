@@ -31,7 +31,23 @@ let config = {
 	},
 
 	module: {
-		loaders: LOADERS.COMMON.concat(LOADERS.DEV)
+		loaders: LOADERS.COMMON.concat([
+			{
+				test: /\.tsx?$/,
+				loader: 'ts-loader',
+				exclude: /node_modules/
+			},
+			{
+				test: /\.css$/,
+				include: [path.resolve('./src'), path.resolve('./node_modules')],
+				loaders: [
+					'style',
+					'css?modules&importLoaders=2&localIdentName=[local]___[hash:base64:5]',
+					'postcss',
+					'resolve-url'
+				]
+			},
+		])
 	},
 
 	plugins: [],
