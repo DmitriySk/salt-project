@@ -31,6 +31,17 @@
 	height: calc(100% - 25px - 25px);
 }
 
+.m-header-inner-name {
+	display: flex;
+	flex: 1 0 auto;
+}
+
+.m-header-inner-icons {
+	display: flex;
+	flex: 0 0 auto;
+	height: 70px;
+}
+
 .m-header-name-img {
 	width: 500px;
 }

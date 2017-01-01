@@ -13,7 +13,8 @@
 		"paths": {
 			"_page/*": 		["src/Pages/*"],
 			"_component/*": ["src/components/*"],
-			"_container/*": ["src/containers/*"]
+			"_container/*": ["src/containers/*"],
+			"_ui/*": ["src/components/ui/*"]
 		}
 	},
 	"include": [

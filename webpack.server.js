@@ -1,5 +1,6 @@
 let path = require('path');
 let fs = require('fs');
+const resolve = require("./config/webpack.resolve")(__dirname);
 
 let config = {
 	externals: [
@@ -17,14 +18,12 @@ let config = {
 
 	target: 'node',
 
-	resolve: {
-		extensions: ['', '.ts', '.tsx', '.js'],
-	},
+	resolve: resolve,
 
 	entry: './server.ts',
 
 	output: {
-		path: "./",
+		path: __dirname,
 		filename: './server.js',
 		publicPath: '/public/',
 	},

@@ -42,7 +42,7 @@ let dev = merge(common, {
 
 	output: {
 		path: path.resolve("./public/assets"),
-		publicPath: '/assets/',
+		publicPath: '/assets',
 		filename: '[name].js',
 		pathinfo: true
 	},
