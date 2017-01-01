@@ -1,15 +1,29 @@
 .m-header {
 	height: 100vh;
-	background: #222225;
+	background: url('./bg.jpg') 50% / cover;
 	position: relative;
 }
 
+.m-header::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #030203;
+	opacity: 0.6;
+}
+
+
 .m-header-topline {
+	position: relative;
 	height: 25px;
-	background: #ffba37;
+	background-color: #ffba37;
 }
 
 .m-header-inner {
+	position: relative;
 	display: flex;
 	flex-flow: column nowrap;
 	align-items: center;

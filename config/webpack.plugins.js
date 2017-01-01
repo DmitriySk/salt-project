@@ -5,7 +5,7 @@ let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let ManifestPlugin = require('webpack-manifest-plugin');
 
 
-module.exports.PLUGINS_COMMON = [
+module.exports.COMMON = [
 	new ManifestPlugin({
 		fileName: 'manifest.json'
 	}),
@@ -33,7 +33,7 @@ module.exports.PLUGINS_COMMON = [
 	}),
 ];
 
-module.exports.PLUGINS_DEV = [
+module.exports.DEV = [
 	new webpack.DefinePlugin({
 		'process.env.BROWSER': JSON.stringify(true),
 		'process.env.NODE_ENV': JSON.stringify('development')
@@ -42,7 +42,7 @@ module.exports.PLUGINS_DEV = [
 	new webpack.NoErrorsPlugin(),
 ];
 
-module.exports.PLUGINS_PROD = [
+module.exports.PROD = [
 	new webpack.DefinePlugin({
 		'process.env.BROWSER': JSON.stringify(true),
 		'process.env.NODE_ENV': JSON.stringify('production')

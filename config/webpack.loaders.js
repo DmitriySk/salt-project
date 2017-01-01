@@ -1,7 +1,7 @@
 let path = require('path');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports.LOADERS_COMMON = [
+module.exports.COMMON = [
 	{
 		test: /\.json$/,
 		loader: 'json'
@@ -28,7 +28,7 @@ module.exports.LOADERS_COMMON = [
 	}
 ];
 
-module.exports.LOADERS_DEV = [
+module.exports.DEV = [
 	{
 		test: /\.tsx?$/,
 		loader: 'react-hot/webpack!ts'
@@ -38,13 +38,14 @@ module.exports.LOADERS_DEV = [
 		include: [path.resolve('./src'), path.resolve('./node_modules')],
 		loaders: [
 			'style',
-			'css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
-			'postcss'
+			'css?modules&importLoaders=2&localIdentName=[local]___[hash:base64:5]',
+			'postcss',
+			'resolve-url'
 		]
 	},
 ];
 
-module.exports.LOADERS_PROD = [
+module.exports.PROD = [
 	{
 		test: /\.tsx?$/,
 		loader: 'ts'
@@ -54,8 +55,9 @@ module.exports.LOADERS_PROD = [
 		include: [path.resolve('./src'), path.resolve('./node_modules')],
 		loader: ExtractTextPlugin.extract(
 			'style',
-			'css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
-			'postcss'
+			'css?modules&importLoaders=2&localIdentName=[local]___[hash:base64:5]',
+			'postcss',
+			'resolve-url'
 		)
 	},
 ];

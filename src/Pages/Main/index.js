@@ -6,8 +6,6 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var React = require("react");
 var header_1 = require("../../containers/header");
-var footer_1 = require("../../containers/footer");
-var center_1 = require("../../containers/center");
 var Main = (function (_super) {
     __extends(Main, _super);
     function Main(props) {
@@ -25,9 +23,7 @@ var Main = (function (_super) {
     };
     Main.prototype.render = function () {
         return React.createElement("div", { className: "main_page" },
-            React.createElement(header_1.default, null),
-            React.createElement(center_1.default, null),
-            React.createElement(footer_1.default, null));
+            React.createElement(header_1.default, null));
     };
     return Main;
 }(React.Component));

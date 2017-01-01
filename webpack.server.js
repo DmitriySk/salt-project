@@ -21,7 +21,7 @@ let config = {
 		extensions: ['', '.ts', '.tsx', '.js'],
 	},
 
-	entry: './index.js',
+	entry: './server.ts',
 
 	output: {
 		path: "./",
