@@ -8,23 +8,23 @@ module.exports.COMMON = [
 	},
 	{
 		test: /\.eot(\?.*)?$/,
-		loader: 'file?name=font/[hash].[ext]'
+		loader: 'file?name=[hash].[ext]'
 	},
 	{
 		test: /\.(woff|woff2)(\?.*)?$/,
-		loader: 'file?name=font/[hash].[ext]'
+		loader: 'file?name=[hash].[ext]'
 	},
 	{
 		test: /\.ttf(\?.*)?$/,
-		loader: 'url?limit=10000&mimetype=application/octet-stream&name=font/[hash].[ext]'
+		loader: 'url?limit=10000&mimetype=application/octet-stream&name=[hash].[ext]'
 	},
 	{
 		test: /\.svg(\?.*)?$/,
-		loader: 'url?limit=10000&mimetype=image/svg+xml&name=font/[hash].[ext]'
+		loader: 'url?limit=10000&mimetype=image/svg+xml&name=[hash].[ext]'
 	},
 	{
 		test: /\.(jpe?g|png|gif)$/i,
-		loader: 'url?limit=1000&name=img/[hash].[ext]'
+		loader: 'url?limit=1000&name=[hash].[ext]'
 	}
 ];
 
