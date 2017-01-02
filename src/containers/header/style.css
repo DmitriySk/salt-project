@@ -11,15 +11,15 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: #030203;
-	opacity: 0.6;
+	background-color: #0d1821;
+	opacity: 0.7;
 }
 
 
 .m-header-topline {
 	position: relative;
 	height: 25px;
-	background-color: #ffba37;
+	background-color: #ffbc00;
 }
 
 .m-header-inner {
@@ -39,11 +39,11 @@
 .m-header-inner-icons {
 	display: flex;
 	flex: 0 0 auto;
-	height: 70px;
+	height: 95px;
 }
 
 .m-header-name-img {
-	width: 500px;
+	width: 600px;
 }
 
 .m-header-bottomline {

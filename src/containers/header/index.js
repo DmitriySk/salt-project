@@ -22,7 +22,7 @@ var Header = (function (_super) {
         var icons_btns = icons.map(function (icon, i) {
             return React.createElement(ImageButton_1.default, { key: i, style: {
                     margin: '0 10px'
-                }, image: icon, width: 60 });
+                }, image: icon });
         });
         return React.createElement("div", { className: s['m-header'] },
             React.createElement("div", { className: s['m-header-topline'] }),

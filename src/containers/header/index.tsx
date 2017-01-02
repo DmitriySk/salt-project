@@ -23,7 +23,6 @@ export default class Header extends React.Component<IProps, IState> {
 					margin: '0 10px'
 				}}
 				image={icon}
-				width={60}
 			/>;
 		});
 
