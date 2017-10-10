@@ -8,14 +8,14 @@ interface IProps {
 	style?: any
 }
 
-export default class ImageButton extends React.Component<IProps, void> {
-	render() {
-		return <div className={s.image_button} style={this.props.style || {}}>
-			<img
-				style={{
-					width: this.props.width || 50
-				}}
-				src={this.props.image}/>
-		</div>;
-	}
+export default function ImageButton({ style, image, width }: IProps): JSX.Element {
+    return (
+        <div className={s.image_button} style={style || {}}>
+            <img
+                style={{
+                    width: width || 50
+                }}
+                src={image}/>
+        </div>
+    );
 }

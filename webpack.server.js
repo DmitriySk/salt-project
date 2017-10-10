@@ -1,8 +1,9 @@
 let path = require('path');
 let fs = require('fs');
 const resolve = require("./config/webpack.resolve")(__dirname);
+const cssLocalIdentName = '[name]__[local]_[hash:base64:5]';
 
-let config = {
+module.exports = {
 	externals: [
 		(context, request, callback) => {
 			const originRequest = request.split('!').pop();
@@ -29,42 +30,35 @@ let config = {
 	},
 
 	module: {
-		loaders: [
+		rules: [
 			{
 				test: /\.json$/,
 				loader: 'json-loader'
 			},
 			{
 				test: /\.tsx?$/,
-				loader: 'ts-loader',
-				exclude: /node_modules/
+				loader: 'ts-loader'
 			},
 			{
 				test: /\.css$/,
 				loaders: [
 					'isomorphic-style-loader',
-					'css-loader?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]'
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: cssLocalIdentName
+            }
+          }
 				]
 			},
 			{
-				test: /\.eot(\?.*)?$/,
-				loader: 'file?name=public/assets/[hash].[ext]'
-			},
-			{
-				test: /\.(woff|woff2)(\?.*)?$/,
-				loader: 'file-loader?name=public/assets/[hash].[ext]'
-			},
-			{
-				test: /\.ttf(\?.*)?$/,
-				loader: 'url?limit=10000&mimetype=application/octet-stream&name=public/assets/[hash].[ext]'
-			},
-			{
 				test: /\.svg(\?.*)?$/,
-				loader: 'url?limit=10000&mimetype=image/svg+xml&name=public/assets/[hash].[ext]'
+				loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=public/assets/[hash].[ext]'
 			},
 			{
-				test: /\.(jpe?g|png|gif)$/i,
-				loader: 'url?limit=1000&name=public/assets/[hash].[ext]'
+        test: /\.(png|gif|jpe?g|svg|ttf|otf|eot|woff2?)$/,
+				loader: 'url-loader?limit=1000&name=public/assets/[hash].[ext]'
 			}
 		]
 	},
@@ -80,5 +74,3 @@ let config = {
 		__dirname: false
 	}
 };
-
-module.exports = config;

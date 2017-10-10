@@ -8,8 +8,6 @@ module.exports = function(dirname) {
 			_container: path.resolve(dirname, "./src/containers"),
 			_ui: path.resolve(dirname, "./src/components/ui"),
 		},
-		root: dirname,
-		modulesDirectories: ["src", "node_modules"],
-		extensions: ['', '.ts', '.tsx', '.js', '.jsx']
+		extensions: ['.ts', '.tsx', '.js', '.jsx']
 	};
 };

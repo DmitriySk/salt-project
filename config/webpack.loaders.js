@@ -1,63 +1,91 @@
 let path = require('path');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports.COMMON = [
-	{
-		test: /\.json$/,
-		loader: 'json'
-	},
-	{
-		test: /\.eot(\?.*)?$/,
-		loader: 'file?name=[hash].[ext]'
-	},
-	{
-		test: /\.(woff|woff2)(\?.*)?$/,
-		loader: 'file?name=[hash].[ext]'
-	},
-	{
-		test: /\.ttf(\?.*)?$/,
-		loader: 'url?limit=10000&mimetype=application/octet-stream&name=[hash].[ext]'
-	},
-	{
-		test: /\.svg(\?.*)?$/,
-		loader: 'url?limit=10000&mimetype=image/svg+xml&name=[hash].[ext]'
-	},
-	{
-		test: /\.(jpe?g|png|gif)$/i,
-		loader: 'url?limit=1000&name=[hash].[ext]'
-	}
-];
+const cssLocalIdentName = '[name]__[local]_[hash:base64:5]';
 
-module.exports.DEV = [
-	{
-		test: /\.tsx?$/,
-		loader: 'react-hot/webpack!ts'
-	},
-	{
-		test: /\.css$/,
-		include: [path.resolve('./src'), path.resolve('./node_modules')],
-		loaders: [
-			'style',
-			'css?modules&importLoaders=2&localIdentName=[local]___[hash:base64:5]',
-			'postcss',
-			'resolve-url'
-		]
-	},
-];
-
-module.exports.PROD = [
-	{
-		test: /\.tsx?$/,
-		loader: 'ts'
-	},
-	{
-		test: /\.css$/,
-		include: [path.resolve('./src'), path.resolve('./node_modules')],
-		loader: ExtractTextPlugin.extract(
-			'style',
-			'css?modules&importLoaders=2&localIdentName=[local]___[hash:base64:5]',
-			'postcss',
-			'resolve-url'
-		)
-	},
-];
+module.exports = function (dirname) {
+  return [
+    {
+      test: /\.tsx?$/,
+      loader: 'ts-loader'
+    },
+    {
+      test: /\.css$/,
+      include: path.resolve(dirname, 'src'),
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: [
+          {
+            loader: 'css-loader',
+            options: {
+              root: '.',
+              modules: true,
+              importLoaders: 2,
+              localIdentName: cssLocalIdentName
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'resolve-url-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ]
+      })
+    },
+    {
+      test: /\.json$/,
+      use: 'json-loader'
+    },
+    {
+      test: /\.eot(\?.*)?$/,
+      use: {
+        loader: 'file-loader',
+        options: {
+          name: '[hash].[ext]'
+        }
+      }
+    },
+    {
+      test: /\.(woff|woff2)(\?.*)?$/,
+      use: {
+        loader: 'file-loader',
+        options: {
+          name: '[hash].[ext]'
+        }
+      }
+    },
+    {
+      test: /\.ttf(\?.*)?$/,
+      use: {
+        loader: 'url-loader',
+        options: {
+          limit: 1000,
+          mimetype: 'application/octet-stream',
+          name: '[hash].[ext]'
+        }
+      }
+    },
+    {
+      test: /\.svg(\?.*)?$/,
+      use: {
+        loader: 'url-loader',
+        options: {
+          limit: 1000,
+          mimetype: 'image/svg+xml',
+          name: '[hash].[ext]'
+        }
+      }
+    },
+    {
+      test: /\.(png|gif|jpg|jpeg|ttf|otf|eot|woff2?)$/,
+      use: 'url-loader?name=[hash:base64:5].[ext]'
+    }
+  ];
+};
