@@ -18,7 +18,7 @@ module.exports = function() {
 			} else if (redirectLocation) {
 				res.redirect(302, redirectLocation.pathname + redirectLocation.search);
 			} else if (renderProps) {
-				let html = ReactServer.renderToString(React.createElement(Router.RouterContext, renderProps));
+				let html = ReactServer.renderToNodeStream(React.createElement(Router.RouterContext, renderProps));
 				res.render('index', {
 					html: html,
 					styles: renderStyles,

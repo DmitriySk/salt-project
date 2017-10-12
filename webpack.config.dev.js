@@ -20,9 +20,7 @@ module.exports = merge(common, {
 	devtool: 'eval',
 
 	entry: [
-    'react-hot-loader/patch',
 		'webpack-hot-middleware/client?reload=true',
-		'./src/mainstyle.css',
 		'./src/index.tsx',
 	],
 

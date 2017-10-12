@@ -40,7 +40,7 @@ module.exports = {
 				loader: 'ts-loader'
 			},
 			{
-				test: /\.css$/,
+				test: /\.s?css$/,
 				loaders: [
 					'isomorphic-style-loader',
           {
@@ -49,6 +49,9 @@ module.exports = {
               modules: true,
               localIdentName: cssLocalIdentName
             }
+          },
+          {
+            loader: 'sass-loader'
           }
 				]
 			},

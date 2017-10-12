@@ -19,7 +19,7 @@ let common = {
 module.exports = merge(common, {
 	bail: true,
 
-  entry: ['./src/mainstyle.css', './src/index.tsx'],
+  entry: './src/index.tsx',
 
 	output: {
 		path: path.resolve("./public/assets"),

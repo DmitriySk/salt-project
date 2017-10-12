@@ -1,0 +1,18 @@
+.icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon_svg {
+  /* empty */
+}
+
+.icon-stories {
+  display: flex;
+  flex-flow: row wrap;
+
+  .icon {
+    padding: 15px;
+  }
+}

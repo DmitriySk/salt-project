@@ -9,11 +9,6 @@ module.exports.COMMON = [
 	new ManifestPlugin({
 		fileName: 'manifest.json'
 	}),
-  new ExtractTextPlugin({
-    filename: '[name].[chunkhash].min.css',
-    publicPath: '/assets',
-    allChunks: true
-  }),
 	new webpack.ProgressPlugin(function handler(percentage, msg) {
 		let msgArr = msg.split(" "), allChanks = -1, curChank = -1;
 
@@ -43,8 +38,10 @@ module.exports.DEV = [
 		'process.env.BROWSER': JSON.stringify(true),
 		'process.env.NODE_ENV': JSON.stringify('development')
 	}),
+  new ExtractTextPlugin({
+    disable: true
+  }),
 	new webpack.HotModuleReplacementPlugin(),
-	new webpack.NoEmitOnErrorsPlugin(),
 ];
 
 module.exports.PROD = [
@@ -52,6 +49,11 @@ module.exports.PROD = [
 		'process.env.BROWSER': JSON.stringify(true),
 		'process.env.NODE_ENV': JSON.stringify('production')
 	}),
+  new ExtractTextPlugin({
+    filename: '[name].[chunkhash].min.css',
+    publicPath: '/assets',
+    allChunks: true
+  }),
 	new CompressionPlugin({
 		asset: "[path].gz[query]",
 		algorithm: "gzip",
@@ -59,7 +61,6 @@ module.exports.PROD = [
 		threshold: 10240,
 		minRatio: 0.8
 	}),
-	new webpack.optimize.OccurrenceOrderPlugin(),
 	new webpack.optimize.CommonsChunkPlugin({
 		name: 'common',
 		filename: '[name].[chunkhash].min.js',

@@ -7,10 +7,17 @@ module.exports = function (dirname) {
   return [
     {
       test: /\.tsx?$/,
-      loader: 'ts-loader'
+      use: [
+        {
+          loader: 'react-hot-loader/webpack'
+        },
+        {
+          loader: 'ts-loader'
+        }
+      ]
     },
     {
-      test: /\.css$/,
+      test: /\.s?css$/,
       include: path.resolve(dirname, 'src'),
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
@@ -18,23 +25,19 @@ module.exports = function (dirname) {
           {
             loader: 'css-loader',
             options: {
-              root: '.',
               modules: true,
               importLoaders: 2,
               localIdentName: cssLocalIdentName
             }
           },
           {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true
-            }
+            loader: 'postcss-loader'
           },
           {
-            loader: 'resolve-url-loader',
-            options: {
-              sourceMap: true
-            }
+            loader: 'resolve-url-loader'
+          },
+          {
+            loader: 'sass-loader?sourceMap'
           }
         ]
       })

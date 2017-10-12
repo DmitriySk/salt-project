@@ -10,7 +10,8 @@
 		"typeRoots": [
 			"./node_modules/@types"
 		],
-		"baseUrl": "."
+		"baseUrl": ".",
+    "allowSyntheticDefaultImports": true
 	},
 	"include": [
 		"src/**/*.ts",

@@ -1,4 +1,6 @@
 .m-header {
+  display: flex;
+  flex-flow: column nowrap;
 	height: 100vh;
 	background: url('./bg.jpg') 50% / cover;
 	position: relative;
@@ -16,10 +18,26 @@
 }
 
 
-.m-header-topline {
+.m-header-topmenu {
+	display: flex;
+	justify-content: center;
 	position: relative;
-	height: 25px;
-	background-color: #ffbc00;
+    padding: 33px 0 18px;
+	border-top: 8px solid white;
+	border-bottom: 1px solid #C6C6C6;
+}
+
+.m-header-link {
+	color: white;
+  margin: 0 35px;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
 .m-header-inner {
@@ -46,10 +64,16 @@
 	width: 600px;
 }
 
-.m-header-bottomline {
-	height: 0px;
-	width: 100%;
-	border-top: 1px solid #f0eeef;
-	position: absolute;
-	bottom: 23px;
+.m-header-soc-arrow {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.icon-arrow {
+  margin-bottom: 36px;
+  margin-top: 10vh;
+}
+
+.soc_icon {
+	margin: 0 22px;
 }
