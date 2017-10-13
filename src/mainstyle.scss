@@ -1,4 +1,13 @@
 @import "fonts/fonts.scss";
+@import "~normalize.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
 
 html, body {
 	font-family: Roboto, serif;
@@ -9,4 +18,5 @@ html, body {
 body {
 	padding: 0;
 	margin: 0;
+  font-size: 1.6rem;
 }

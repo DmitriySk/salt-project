@@ -29,6 +29,7 @@
     "morgan": "^1.9.0",
     "node-jsx-babel": "^0.14.2",
     "node-sass": "^3.8.0",
+    "normalize.css": "^7.0.0",
     "object-assign": "^4.0.1",
     "postcss": "^6.0.13",
     "postcss-assets": "^5.0.0",
@@ -70,7 +71,7 @@
   "main": "./index.js",
   "scripts": {
     "prestart": "npm run build",
-    "start": "node server",
+    "start": "cross-env PORT=3333 node server",
     "start:prod": "cross-env NODE_ENV=production cross-env npm start",
     "clean": "rimraf public/assets & rimraf server.js",
     "prebuild": "npm run clean",

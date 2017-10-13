@@ -47,48 +47,33 @@ module.exports = function (dirname) {
       use: 'json-loader'
     },
     {
-      test: /\.eot(\?.*)?$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          name: '[hash].[ext]'
-        }
-      }
-    },
-    {
-      test: /\.(woff|woff2)(\?.*)?$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          name: '[hash].[ext]'
-        }
-      }
-    },
-    {
-      test: /\.ttf(\?.*)?$/,
-      use: {
-        loader: 'url-loader',
-        options: {
-          limit: 1000,
-          mimetype: 'application/octet-stream',
-          name: '[hash].[ext]'
-        }
-      }
-    },
-    {
       test: /\.svg(\?.*)?$/,
       use: {
         loader: 'url-loader',
         options: {
           limit: 1000,
           mimetype: 'image/svg+xml',
-          name: '[hash].[ext]'
+          name: '[hash:base64:5].[ext]'
         }
       }
     },
     {
-      test: /\.(png|gif|jpg|jpeg|ttf|otf|eot|woff2?)$/,
-      use: 'url-loader?name=[hash:base64:5].[ext]'
+      test: /\.(otf|eot|ttf|woff|woff2)$/,
+      use: {
+        loader: 'file-loader',
+        options: {
+          name: '[hash:base64:5].[ext]'
+        }
+      }
+    },
+    {
+      test: /\.(png|gif|jpg|jpeg)$/,
+      use: {
+        loader: 'url-loader',
+        options: {
+          name: '[hash:base64:5].[ext]'
+        }
+      }
     }
   ];
 };

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import Header from "../../containers/header";
+import About from "../../containers/about";
 import Footer from "../../containers/footer";
 import Center from "../../containers/center";
 
@@ -28,6 +29,7 @@ export default class Main extends React.Component<void, IState> {
 	render() {
 		return <div className="main_page">
 			<Header/>
+			<About/>
 		</div>
 	}
 }
