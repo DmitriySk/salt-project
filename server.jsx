@@ -1,18 +1,18 @@
 require('node-jsx-babel').install();
 
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var React = require('react');
-var {renderToStaticMarkup, renderToString} = require('react-dom/server');
-var {RouterContext, match} = require('react-router');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const React = require('react');
+const {renderToStaticMarkup, renderToString} = require('react-dom/server');
+const {RouterContext, match} = require('react-router');
 
-var routes = require('./src/routes').default;
+const routes = require('./src/routes').default;
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.resolve(__dirname, './src/Views'));
