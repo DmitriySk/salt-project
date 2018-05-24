@@ -9,6 +9,7 @@ node_modules
 # Optional npm cache directory
 .npm
 
-/.idea/
+.idea/
 *.iml
-/public/js/
+public/assets/
+server.js
