@@ -18,6 +18,7 @@ let common = {
 
 module.exports = merge(common, {
 	bail: true,
+  mode: 'production',
 
   entry: './src/index.tsx',
 

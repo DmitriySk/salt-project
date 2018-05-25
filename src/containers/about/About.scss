@@ -1,11 +1,141 @@
+@import '../../assets/styles/colors.scss';
+
 .about {
   height: 100vh;
+  position: relative;
+  padding-top: 86px;
+  // background: url('./pixel.png') 50% 0;
 }
 
 .bg_text {
+  position: absolute;
+  top: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 15vh;
-  font-size: 18vw;
-  color: rgba(48, 48, 51, 0.05);
+  padding-top: 129px;
+  font-size: 24.8rem;
+  font-weight: 400;
+  line-height: 30rem;
+  color: transparentize($black, 0.95);
+}
+
+.title {
+  margin: 0;
+  width: 100%;
+  color: $black;
+  font-size: 3.6rem;
+  font-weight: 400;
+  text-align: center;
+  text-transform: uppercase;
+
+  span {
+    display: inline-block;
+    text-align: justify;
+    position: relative;
+    padding-bottom: 4px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      border: 1.5px solid $yellow;
+    }
+  }
+
+}
+
+.main_block {
+  padding-top: 118px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.left_side {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  width: 340px;
+  margin: 0 76px;
+
+  .photo {
+    width: 295px;
+    height: 295px;
+    border-radius: 50%;
+    background: $yellow url('./photo.png') 50%;
+  }
+
+  .contact_info {
+    margin-top: 55px;
+    padding-left: 68px;
+
+    .icon {
+      display: flex;
+      align-items: center;
+      color: $gray;
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 2.6rem;
+
+      &::before {
+        width: 25px;
+        background: no-repeat 50% / contain;
+      }
+
+      &.place {
+        &::before {
+          content: '';
+          height: 24px;
+          background-image: url('./place.svg');
+        }
+      }
+
+      &.mail {
+        &::before {
+          content: '';
+          height: 12px;
+          background-image: url('./mail.svg');
+        }
+      }
+
+      &.phone {
+        &::before {
+          content: '';
+          height: 18px;
+          background-image: url('./phone.svg');
+        }
+      }
+
+      &.skype {
+        &::before {
+          content: '';
+          height: 17px;
+          background-image: url('./skype.svg');
+        }
+      }
+    }
+  }
+}
+
+.right_side {
+  width: 465px;
+  margin: 0 100px;
+  padding-top: 6px;
+
+  .about_text {}
+
+  .paragraph {
+    padding: 2px 0;
+    color: $gray;
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 1.9rem;
+    letter-spacing: 0.07rem;
+  }
 }

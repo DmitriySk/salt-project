@@ -18,6 +18,8 @@ let common = {
 
 module.exports = merge(common, {
 	devtool: 'eval',
+	mode: 'development',
+  performance: { hints: false },
 
 	entry: [
 		'webpack-hot-middleware/client?reload=true',
