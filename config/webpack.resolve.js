@@ -1,13 +1,11 @@
 let path = require('path');
 
-module.exports = function(dirname) {
-	return {
-		alias: {
-			_page: path.resolve(dirname, "src/Pages"),
-			_component: path.resolve(dirname, "./src/components"),
-			_container: path.resolve(dirname, "./src/containers"),
-			_ui: path.resolve(dirname, "./src/components/ui"),
-		},
-		extensions: ['.ts', '.tsx', '.js', '.jsx']
-	};
+module.exports = function (dirname) {
+  return {
+    modules: [
+      path.resolve(dirname, 'src'),
+      path.resolve(dirname, 'node_modules')
+    ],
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
+  };
 };

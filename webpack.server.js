@@ -35,18 +35,30 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader'
+        use: [
+          {
+            loader: 'ts-loader'
+          }
+        ]
       },
       {
         test: /\.s?css$/,
-        loaders: [
+        include: path.resolve(__dirname, 'src'),
+        use: [
           'isomorphic-style-loader',
           {
             loader: 'css-loader',
             options: {
               modules: true,
+              importLoaders: 2,
               localIdentName: cssLocalIdentName
             }
+          },
+          {
+            loader: 'postcss-loader'
+          },
+          {
+            loader: 'resolve-url-loader'
           },
           {
             loader: 'sass-loader'
@@ -55,11 +67,24 @@ module.exports = {
       },
       {
         test: /\.svg(\?.*)?$/,
-        loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=public/assets/[hash].[ext]'
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 1000,
+            mimetype: 'image/svg+xml',
+            name: 'public/assets/[hash:base64:5].[ext]'
+          }
+        }
       },
       {
         test: /\.(png|gif|jpe?g|svg|ttf|otf|eot|woff2?)$/,
-        loader: 'url-loader?limit=1000&name=public/assets/[hash].[ext]'
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 1000,
+            name: 'public/assets/[hash:base64:5].[ext]'
+          }
+        }
       }
     ]
   },

@@ -1,4 +1,4 @@
-import ImageButton from "_component/ui/ImageButton";
+import ImageButton from "../ui/ImageButton";
 export {
 	ImageButton
 };

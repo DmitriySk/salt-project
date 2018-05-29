@@ -60,6 +60,7 @@ module.exports = function (dirname, devMode) {
       use: {
         loader: 'file-loader',
         options: {
+          limit: 1000,
           name: '[hash:base64:5].[ext]'
         }
       }
@@ -69,6 +70,7 @@ module.exports = function (dirname, devMode) {
       use: {
         loader: 'url-loader',
         options: {
+          limit: 1000,
           name: '[hash:base64:5].[ext]'
         }
       }

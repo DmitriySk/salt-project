@@ -1,0 +1,139 @@
+@import "../../assets/styles/colors";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: $black;
+}
+
+.resume {
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  width: 100%;
+  color: $white;
+  font-size: 3.6rem;
+  font-weight: 400;
+  text-align: center;
+  text-transform: uppercase;
+
+  span {
+    display: inline-block;
+    text-align: justify;
+    position: relative;
+    padding-bottom: 4px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      border: 1.5px solid $yellow;
+    }
+  }
+}
+
+.stepper {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  color: $white;
+
+  .step_title {
+    text-align: center;
+  }
+
+  .steps {
+    &::before, &::after {
+      content: '';
+      display: block;
+      height: 10px;
+      width: 10px;
+      border-radius: 5px;
+      background: $gray2;
+      margin: auto;
+    }
+  }
+
+  .step {
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      height: 50px;
+      width: 2px;
+      background: $gray2;
+      margin: auto;
+    }
+
+    &:last-child::after {
+      content: '';
+      display: block;
+      height: 50px;
+      width: 2px;
+      background: $gray2;
+      margin: auto;
+    }
+
+    &_inner {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+    }
+
+    &_left .step_inner {
+      &::after {
+        content: '';
+        flex: 1;
+      }
+
+      .step_description {
+        text-align: right;
+      }
+    }
+
+    &_right .step_inner {
+      &::before {
+        content: '';
+        flex: 1;
+      }
+
+      .step_description {
+        text-align: left;
+        order: 3;
+      }
+    }
+
+    &_description {
+      flex: 1;
+      color: $gray2;
+
+      .step_d_title {
+        font-weight: 500;
+      }
+      .step_d_subtitle {
+        font-weight: 300;
+      }
+    }
+
+    &_period {
+      width: 225px;
+    }
+
+    &_current {
+      .step_period {
+        color: $yellow;
+      }
+    }
+  }
+}

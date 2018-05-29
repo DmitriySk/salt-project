@@ -1,9 +1,15 @@
 @import '../../assets/styles/colors.scss';
 
-.about {
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
+}
+
+.about {
+  width: 100%;
   position: relative;
-  padding-top: 86px;
   // background: url('./pixel.png') 50% 0;
 }
 
@@ -137,5 +143,9 @@
     font-size: 1.4rem;
     line-height: 1.9rem;
     letter-spacing: 0.07rem;
+  }
+
+  .button {
+    margin-top: 100px;
   }
 }

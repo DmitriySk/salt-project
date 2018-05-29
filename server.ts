@@ -17,7 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
 	devMiddle(app);
 }
 
-let port = process.env.NODE_ENV === 'production' ? 8080 : 3000;
+let port = process.env.NODE_ENV === 'production' ? 8080 : 3333;
 app.set('port', process.env.PORT || port);
 
 // view engine setup

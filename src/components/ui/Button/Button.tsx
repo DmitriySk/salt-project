@@ -1,11 +1,21 @@
-import React from 'react';
+import * as React from 'react';
 import cn from 'classnames';
 
-const s = require('./Button.scss');
+enum Type {
+    rounded = 'rounded'
+}
+
+interface Theme {
+    button: string,
+    type_rounded: string
+}
 
 interface IProps {
+    text: string,
+    theme: Theme,
     className?: string,
-    onClick: () => void
+    onClick: () => void,
+    type?: Type
 }
 
 class Button extends React.Component<IProps, null> {
@@ -16,15 +26,28 @@ class Button extends React.Component<IProps, null> {
     };
 
     render() {
-        const { className = '' } = this.props;
+        const {
+            text,
+            className = '',
+            type = '',
+            theme
+        } = this.props;
+
+        const props = {
+            onClick: this.handleClick,
+            className: cn({
+                [theme.button]: true,
+                [className]: !!className,
+                [theme[`type_${type}`]]: !!type
+            })
+        };
 
         return (
-            <button
-                className={cn(s.button, className)}
-                onClick={this.handleClick}
-            />
+            <button {...props}>{text}</button>
         );
     }
 }
 
 export default Button;
+
+export const ButtonType = Type;

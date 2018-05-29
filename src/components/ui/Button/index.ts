@@ -1,3 +1,7 @@
-import Button from './Button';
+import { themr } from 'react-css-themr';
+import Button, { ButtonType } from './Button';
 
-export default Button;
+const theme = require('./Button.scss');
+
+export default themr('Button', theme)(Button);
+export { ButtonType };

@@ -23,14 +23,13 @@ module.exports = merge(common, {
 
 	entry: [
 		'webpack-hot-middleware/client?reload=true',
-		'./src/index.tsx',
+    path.resolve(__dirname, 'src/index.tsx')
 	],
 
 	output: {
-		path: path.resolve("./public/assets"),
+		path: path.resolve(__dirname, 'public/assets'),
 		publicPath: '/assets/',
-		filename: '[name].js',
-		pathinfo: true
+		filename: '[name].js'
 	},
 
 	plugins: PLUGINS.DEV

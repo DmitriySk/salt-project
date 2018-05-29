@@ -1,9 +1,10 @@
 import * as React from 'react';
 
-import Header from "../../containers/header";
-import About from "../../containers/about";
-import Footer from "../../containers/footer";
+import Header from "../../containers/Header/index";
+import About from "../../containers/About";
+import Footer from "../../containers/Footer";
 import Center from "../../containers/center";
+import Resume from "../../containers/Resume";
 
 interface IState {
 	click_count: number;
@@ -30,6 +31,7 @@ export default class Main extends React.Component<void, IState> {
 		return <div className="main_page">
 			<Header/>
 			<About/>
+			<Resume/>
 		</div>
 	}
 }
