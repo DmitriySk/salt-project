@@ -1,35 +1,24 @@
-import * as React from 'react';
-
 import Header from "../../containers/header";
-import About from "../../containers/about";
+import About from "../../containers/about/About.tsx";
 import Footer from "../../containers/footer";
 import Center from "../../containers/center";
+import {useCallback, useState} from "react";
 
-interface IState {
-	click_count: number;
-}
+const Main = () => {
+	const [clickCount, setClickCount] = useState<number>(0);
 
-export default class Main extends React.Component<void, IState> {
-	constructor(props) {
-		super(props);
+	const handleClick = useCallback(() => {
+		setClickCount(clickCount + 1);
+	}, [clickCount]);
 
-		this.state = {
-			click_count: 0
-		};
-
-		this.onClick = this.onClick.bind(this);
-	}
-
-	onClick() {
-		this.setState({
-			click_count: this.state.click_count + 1
-		});
-	}
-
-	render() {
-		return <div className="main_page">
+	return (
+		<div className="main_page" onClick={handleClick}>
 			<Header/>
 			<About/>
+			<Center/>
+			<Footer/>
 		</div>
-	}
-}
+	)
+};
+
+export default Main;

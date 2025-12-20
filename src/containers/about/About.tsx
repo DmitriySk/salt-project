@@ -1,13 +1,11 @@
-import * as React from 'react';
+import s from './About.module.css';
 
-const s = require('./About.scss');
+const About = () => {
+    return (
+        <div className={s.about}>
+            <div className={s.bgText}>ABOUT ME</div>
+        </div>
+    )
+};
 
-export default class About extends React.Component {
-    render() {
-        return (
-            <div className={s.about}>
-                <div className={s.bg_text}>ABOUT ME</div>
-            </div>
-        );
-    }
-}
+export default About;

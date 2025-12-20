@@ -2,10 +2,10 @@
   height: 100vh;
 }
 
-.bg_text {
+.bgText {
   display: flex;
   justify-content: center;
   padding-top: 15vh;
   font-size: 18vw;
-  color: rgba(48, 48, 51, 0.05);
+  color: rgb(48 48 51 / 5%);
 }
